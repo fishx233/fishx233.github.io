@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content=""><meta name="keywords" content=""><meta name="author" content="Fish"><meta name="copyright" content="Fish"><title>Fish</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '6.3.0'
+} </script><meta name="generator" content="Hexo 6.3.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text"> 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#actor%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text"> Actor模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%B9%E9%94%99"><span class="toc-number">3.</span> <span class="toc-text"> 容错</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#csp-vs-actor"><span class="toc-number">4.</span> <span class="toc-text"> CSP vs Actor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#actor%E7%9A%84%E4%B8%8D%E8%B6%B3%E4%B9%8B%E5%A4%84"><span class="toc-number">5.</span> <span class="toc-text"> Actor的不足之处</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E4%BB%A5%E5%8F%8A%E6%89%A9%E5%B1%95%E9%98%85%E8%AF%BB"><span class="toc-number">6.</span> <span class="toc-text"> 引用以及扩展阅读</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">Fish</div><div class="author-info__description text-center"></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">6</span></a></div></div></div><div id="content-outer"><div class="no-bg" id="top-container"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Fish</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right"></span></div><div id="post-info"><div id="post-title">No title</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2023-08-12</time></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p><a name="OD3pj"></a></p>
+<h2 id="简介"><a class="markdownIt-Anchor" href="#简介"></a> 简介</h2>
+<p>Carl Hewitt 在1973年对Actor模型进行了如下定义：“Actor模型是一个把’Actor’作为并发计算的通用原语”. 在Actor模型中一切都是Actor，所有逻辑或模块都可以看成是Actor，通过不同Actor之间的消息传递实现模块之间的通信和交互。<br />它体现了三件事：</p>
+<ul>
+<li>信息处理（计算）</li>
+<li>存储（状态）</li>
+<li>通信</li>
+</ul>
+<p>from wiki</p>
+<blockquote>
+<p>The actor model in <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Computer_science">computer science</a> is a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Mathematical_model">mathematical model</a> of <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Concurrent_computation">concurrent computation</a> that treats an actor as the basic building block of concurrent computation. In response to a <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Message_(computing)">message</a> it receives, an actor can: make local decisions, create more actors, send more messages, and determine how to respond to the next message received. Actors may modify their own <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Private_state">private state</a>, but can only affect each other indirectly through messaging (removing the need for <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Lock_(computer_science)">lock-based synchronization</a>).</p>
+</blockquote>
+<p><a name="sxsqH"></a></p>
+<h2 id="actor模型"><a class="markdownIt-Anchor" href="#actor模型"></a> Actor模型</h2>
+<p>一般来说，有两种策略用来在并发中进行通信：共享数据、消息传递。在传统并发模型中，使用共享内存是倾向于强一致性弱隔离性的，例如悲观锁同步的方式就是使用强一致性的方式控制并发。而Actor则是使用后者，Actor模型天然是强隔离性且弱一致性的，所以Actor模型在并发中有良好的性能，而且易于控制和管理。可以见得，Actor更适合一致性要求不高，但性能要求较高的场景下。</p>
+<p>Actor系统由多个Actor组成，Actor是计算的<strong>基本单元</strong>，由以下三者组成：</p>
+<ul>
+<li>状态（state）：状态是指actor对象的变量信息，状态由actor自身管理，避免并发环境下的锁和内存原子性等问题。<strong>状态不可能被变其他actoc所改变</strong>。</li>
+<li>行为（behavior）：行为指定的是actor中计算逻辑，通过actor接收到的消息来改变actor的状态。</li>
+<li>邮箱（mailbox）：邮箱是actor之间的通信桥梁，邮箱内部通过FIFO消息队列来存储发送发消息，而接收方则从邮箱中获取消息。（邮箱也是Actor）</li>
+</ul>
+<p>简单来说大概长这样</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Actor <span class="keyword">struct</span> &#123;</span><br><span class="line">	state <span class="type">int</span></span><br><span class="line">    mailbox []Message</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*Actor)</span></span> send() &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(*Actor)</span></span> recive(m Message) &#123;</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Actor接收到消息之后，他可以执行以下操作中的任意一件：</p>
+<ul>
+<li>创建更多Actor</li>
+<li>向其他Actor发送消息</li>
+<li>指定如何处理下一条消息（意味着可以定义它收到的下一条消息的状态如何。更明确地说，就是Actor如何修改状态。）</li>
+</ul>
+<p>尽管多个Actor同时运行，但是每个Actor只能顺序地处理消息，可以理解为每个actor都是单线程顺序执行接收到的message（即无共享状态，不用考虑锁）。在一个系统中可以把大规模任务分解成数个小任务，这些小任务可以由多个actor并发处理，从而最大化actor系统的性能。<br />一个简单的Actor模型系统：<br /><img src="https://cdn.nlark.com/yuque/0/2023/webp/1487474/1688259300627-fab6c035-8a5b-4aba-a2e4-231df3fc1b7d.webp#averageHue=%23000000&amp;clientId=u383e6f47-b6ce-4&amp;from=paste&amp;id=u2bcac10b&amp;originHeight=376&amp;originWidth=604&amp;originalType=url&amp;ratio=1.5&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u8aa2e16b-c1d0-4c20-876c-e7c6e4848a6&amp;title=" alt="" /></p>
+<p>在Actor系统中包含一个未处理的任务集，每个任务都由三个属性标识：</p>
+<ul>
+<li>tag用以区分系统中的其他任务</li>
+<li>target 通信到达的地址（接收消息的actor称为target）</li>
+<li>communication 包含在target目标地址上的Actor，处理任务时可获取的信息。</li>
+</ul>
+<p>为简单起见，可见一个任务视为一个消息，在Actor之间传递包含以上三个属性的值的消息。</p>
+<p>每个actor 都有 地址（address）。在各种实现中，地址可以是直接物理地址，例如MAC 地址、内存地址或仅仅是进程标识符 （PID）。 多个 actor 可以有相同的地址，一个 actor 可以有多个地址。 这里有一个多对多的关系。 地址不是 actor 的唯一标识符。 Actor没有身份，只有地址。 我们对地址所能做的就是向它发送消息。Actor 可以向自己发送消息（递归支持），他们将在以后的步骤中接收和处理这些消息。</p>
+<p>Actor模型中存在两个局部性公理 ，包括<strong>组织性公理（Organisational）</strong> 和 <strong>操作性公理（Operational）</strong>。<br /><strong>操作</strong>: <br />响应收到的消息，Actor 只能：</p>
+<ul>
+<li>产生有限数量的新 actor。</li>
+<li>仅将消息发送到刚刚收到的消息中的地址或其本地存储中的地址。</li>
+<li>为下一条消息更新其本地存储（指定如何处理下一条消息）</li>
+</ul>
+<p><strong>组织</strong>：<br />Actor 的本地存储包括的地址<strong>只能是</strong>：</p>
+<ul>
+<li>在创建时提供的</li>
+<li>在消息中收到的</li>
+<li>适用于此处创建的 Actors（操作公理的第 1 段）</li>
+</ul>
+<p>Actor 模型没有为消息传递和处理提供许多保证（这些具体实现都是可扩展的，交给实现方，akka就由多种消息交付等级）。消息传递没有顺序保证，并且可以丢弃消息（例如，如果在发送信使之前 Actor 被销毁），因此我们有尽最大努力的传递。 消息可以持久化（Actor 定义的第 2 段： storage）并且可以重新发送。 消息最多可以传递 一次（一次或零次）。快速到达的消息可能会导致 actor 出现某种拒绝服务，从而使 actor 无法处理传入的消息流。 为了缓解这个问题，存在一个邮箱actor 接收消息并持有这些消息，直到 actor 能够处理它们。 消息可能需要任意长的时间才能最终到达接收方的邮箱。 在 Actor 模型的物理实现中，邮箱中消息的入队和出队是原子操作，因此不可能出现争用情况。<br />
+<a name="SoZQs"></a></p>
+<h2 id="容错"><a class="markdownIt-Anchor" href="#容错"></a> 容错</h2>
+<p>Erlang 引入了「随它崩溃」的哲学理念，这部分关键代码被监控着，监控者的唯一职责是知道代码崩溃后干什么（如将这个单元代码重置为正常状态），让这种理念成为可能的正是actor模型。<br />每段代码都运行在process中，process是erlang称呼actor的方式。这个process完全独立，意味着它的状态不会影响其他process。我们有个supervisor，实际上它只是另一个process（所有东西都是actor），当被监控的process挂了，supervisor这个process会被通知并对此进行处理。这就让我们能创建「自愈」系统了。如果一个actor到达异常状态并崩溃，无论如何，supervisor都可以做出反应并尝试把它变成一致状态，这里有很多策略，最常见的是根据初始状态重启actor。<br />
+<a name="rwuSz"></a></p>
+<h2 id="csp-vs-actor"><a class="markdownIt-Anchor" href="#csp-vs-actor"></a> CSP vs Actor</h2>
+<p>两种模型都基于消息传递：发送者发送消息，接收者获取消息。在这两种模型中，接收器都是同步的：当它准备好侦听消息时，它会阻塞直到收到消息（尽管变体允许它们进行非阻塞轮询或超时）。<br />CSP 是完全同步的。通道写入器必须阻塞，直到通道读取器读取。这种基于阻塞的机制的优点是通道只需要保存一条消息。从很多方面来说，它也更容易推理。<br />对于 Actor 来说，发送是异步的。无论读者是否准备好从邮箱中提取消息，消息发送者都不会阻塞，而是将消息放入通常称为“邮箱”的队列中。这很方便，但有点难以推理，而且邮箱可能必须保存大量消息。<br />CSP有一定相互依赖关系，可能出现死锁，开发人员必须意识到这一点并编写代码，以便消除死锁。<br />CSP 使用通道进行消息传递，而参与者使用邮箱。<br />Actor 只能通过消息传递进行通信，因此使它们成为无状态的。<br />Actor 模型是为分布式程序设计的，因此它可以跨多台机器进行扩展。而CSP只能在一台计算机中工作。<br />Actor 模型比 CSP 更加解耦。<br />
+<a name="xFIDR"></a></p>
+<h2 id="actor的不足之处"><a class="markdownIt-Anchor" href="#actor的不足之处"></a> Actor的不足之处</h2>
+<ul>
+<li>虽然比线程与锁模型更容易debug，但也会碰到actor模型独有的问题（eg:邮箱溢出）；由于actor模型不共享状态，仅通过消息传递来进行交流，所以不太适合实施细粒度的并行。</li>
+<li>针对一致性要求比较强的场景比较乏力。（例如银行扣款，当用户A Actor扣款期间，用户B Actor是不受限的，此时对用户B Actor进行操作是合法的）</li>
+<li>Actor 完全依赖于永远不会耗尽内存的无限输入缓冲区但这并不能保证。Actor没有能力拒绝交流。当消息到达时，必须对其进行处理，或者可能将其放入缓冲区中以供稍后处理。<br />
+<a name="LDJ4u"></a></li>
+</ul>
+<h2 id="引用以及扩展阅读"><a class="markdownIt-Anchor" href="#引用以及扩展阅读"></a> 引用以及扩展阅读</h2>
+<p><a target="_blank" rel="noopener" href="https://dl.acm.org/doi/10.5555/1624775.1624804">https://dl.acm.org/doi/10.5555/1624775.1624804</a><br /><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=7erJ1DV_Tlo">https://www.youtube.com/watch?v=7erJ1DV_Tlo</a><br /><a target="_blank" rel="noopener" href="https://alex-karaberov.medium.com/everything-you-always-wanted-to-know-about-the-actor-model-but-were-afraid-to-ask-b6eee8722953">https://alex-karaberov.medium.com/everything-you-always-wanted-to-know-about-the-actor-model-but-were-afraid-to-ask-b6eee8722953</a><br /><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/d803e2a7de8e">https://www.jianshu.com/p/d803e2a7de8e</a><br /><a target="_blank" rel="noopener" href="https://github.com/asynkron/protoactor-go">https://github.com/asynkron/protoactor-go</a></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Fish</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2023/08/12/2023-05-05-actor模型/">http://example.com/2023/08/12/2023-05-05-actor模型/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2023/08/12/2023-02-22-Kratos%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/"><i class="fa fa-chevron-left">  </i><span></span></a></div><div class="next-post pull-right"><a href="/2023/08/12/2022-09-09-MySQL%20SQL%20Modes%E4%B8%8D%E5%90%8C%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98/"><span></span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2023 By Fish</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>
